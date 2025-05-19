@@ -122,6 +122,10 @@
   #define MODEL_16            0x16 // T-Echo 433 MHz
   #define MODEL_17            0x17 // T-Echo 868/915 MHz
 
+  #define PRODUCT_STATION_G2 0x60 // Station G2
+  #define BOARD_STATION_G2   0x61 // Station G2
+
+
   #define PRODUCT_HMBRW       0xF0
   #define BOARD_HMBRW         0x32
   #define BOARD_HUZZAH32      0x34
@@ -1103,6 +1107,57 @@
           const int pin_led_tx = 48; //47;
         #endif
       #endif
+  #elif BOARD_MODEL == BOARD_STATION_G2
+      #define IS_ESP32S3 true
+      #define MODEM SX1262
+      #define DIO2_AS_RF_SWITCH true
+      #define HAS_BUSY true
+      #define HAS_TCXO true
+      #define OCP_TUNED 0x38
+
+      #define HAS_DISPLAY true
+      #define HAS_CONSOLE true
+      #define HAS_BLUETOOTH false
+      #define HAS_BLE true
+      #define HAS_PMU false
+      #define HAS_NP false
+      #define HAS_SD false
+      #define HAS_EEPROM true
+
+      #define HAS_INPUT true
+      #define HAS_SLEEP false
+      
+      #define PMU_IRQ 40
+      #define I2C_SCL 6
+      #define I2C_SDA 5
+
+      const int pin_btn_usr1 = 38;
+
+      const int pin_cs = 11;
+      const int pin_reset = 21;
+      const int pin_sclk = 12;
+      const int pin_mosi = 13;
+      const int pin_miso = 14;
+      const int pin_tcxo_enable = -1;
+      const int pin_dio = 48;
+      const int pin_busy = 47;
+      
+      const int SD_MISO = 37;
+      const int SD_MOSI = 35;
+      const int SD_CLK = 36;
+      const int SD_CS = 47;
+
+      const int IMU_CS = 34;
+
+      #if HAS_NP == false
+        #if defined(EXTERNAL_LEDS)
+          const int pin_led_rx = 9;
+          const int pin_led_tx = 8;
+        #else
+          const int pin_led_rx = 9;
+          const int pin_led_tx = 8;
+        #endif
+      #endif  
     #else
       #error An unsupported ESP32 board was selected. Cannot compile RNode firmware.
     #endif

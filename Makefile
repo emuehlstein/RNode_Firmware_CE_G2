@@ -158,6 +158,9 @@ firmware-heltec_t114:
 firmware-heltec_t114_gps:
 	arduino-cli compile --log --fqbn Heltec_nRF52:Heltec_nRF52:HT-n5262 -e --build-property "build.partitions=no_ota" --build-property "upload.maximum_size=2097152" --build-property "compiler.cpp.extra_flags=\"-DBOARD_MODEL=0x3C\" \"-DBOARD_VARIANT=0xCB\""
 
+firmware-station_g2:
+	arduino-cli compile --fqbn "esp32:esp32:esp32s3:CDCOnBoot=cdc" -e --build-property "build.partitions=no_ota" --build-property "upload.maximum_size=16777216" --build-property "compiler.cpp.extra_flags=\"-DBOARD_MODEL=0x61\""
+
 upload-tbeam:
 	arduino-cli upload -p $(or $(port), /dev/ttyACM0) --fqbn esp32:esp32:t-beam
 	@sleep 1
@@ -278,6 +281,19 @@ upload-techo:
 	arduino-cli upload -p /dev/ttyACM0 --fqbn adafruit:nrf52:pca10056
 	@sleep 6
 	rnodeconf /dev/ttyACM0 --firmware-hash $$(./partition_hashes from_device /dev/ttyACM0)
+
+upload-station_g2:
+	@echo
+	@echo Put board into flashing mode by holding BOOT button while momentarily pressing the RESET button. Hit enter when done.
+	@read _
+	arduino-cli upload -p $(or $(port), /dev/ttyACM0) --fqbn esp32:esp32:esp32s3
+	@sleep 3
+	python3 ./Release/esptool/esptool.py --chip esp32-s3 --port $(or $(port), /dev/ttyACM0) --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode qio --flash_freq 80m --flash_size 4MB 0x210000 ./Release/console_image.bin
+	@sleep 3
+	@echo Press the RESET button on the board now, and hit enter
+	@read _
+	@sleep 1
+	rnodeconf $(or $(port), /dev/ttyACM0) --firmware-hash $$(./partition_hashes ./build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin)
 
 release:  console-site spiffs-image $(shell grep ^release- Makefile | cut -d: -f1)
 
@@ -530,3 +546,11 @@ release-heltec_t114:
 	adafruit-nrfutil dfu genpkg --dev-type 0x0052 --application build/rnode_firmware_heltec_t114.hex Release/rnode_firmware_heltec_t114.zip
 	rm -r build
 
+release-station_g2:
+	arduino-cli compile --fqbn esp32:esp32:esp32s3:CDCOnBoot=cdc -e --build-property "build.partitions=no_ota" --build-property "upload.maximum_size=16777216" --build-property "compiler.cpp.extra_flags=\"-DBOARD_MODEL=0x3B\""
+	cp ~/.arduino15/packages/esp32/hardware/esp32/$(ESP_IDF_VER)/tools/partitions/boot_app0.bin build/rnode_firmware_station_g2.boot_app0
+	cp build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin build/rnode_firmware_station_g2.bin
+	cp build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bootloader.bin build/rnode_firmware_station_g2.bootloader
+	cp build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.partitions.bin build/rnode_firmware_station_g2.partitions
+	zip --junk-paths ./Release/rnode_firmware_station_g2.zip ./Release/esptool/esptool.py ./Release/console_image.bin build/rnode_firmware_station_g2.boot_app0 build/rnode_firmware_station_g2.bin build/rnode_firmware_station_g2.bootloader build/rnode_firmware_station_g2.partitions
+	rm -r build
