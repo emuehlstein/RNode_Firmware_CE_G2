@@ -224,8 +224,8 @@
       #define HAS_CONSOLE true
       #define HAS_SD false
       #define HAS_EEPROM true
-      #define I2C_SDA 21
-      #define I2C_SCL 22
+      #define I2C_SDA 5
+      #define I2C_SCL 6
       #define PMU_IRQ 35
       #define INTERFACE_COUNT 1
       #define HAS_INPUT true
@@ -246,13 +246,13 @@
       const int8_t interface_pins[INTERFACE_COUNT][10] = { 
                   // SX127X
           {
-              18, // pin_ss
-              -1, // pin_sclk
-              -1, // pin_mosi
-              -1, // pin_miso
-              -1, // pin_busy
-              26, // pin_dio
-              23, // pin_reset
+              11, // pin_ss
+              12, // pin_sclk
+              13, // pin_mosi
+              14, // pin_miso
+              47, // pin_busy
+              48, // pin_dio
+              21, // pin_reset
               -1, // pin_txen
               -1, // pin_rxen
               -1  // pin_tcxo_enable
@@ -263,7 +263,7 @@
       #define OCP_TUNED 0x38
       const uint8_t interfaces[INTERFACE_COUNT] = {SX1262};
       const bool interface_cfg[INTERFACE_COUNT][3] = { 
-                    // SX1262
+                    // SX1262L
           {
               true, // DEFAULT_SPI
               true, // HAS_TCXO
@@ -1115,7 +1115,7 @@
       #define OCP_TUNED 0x38
 
       #define HAS_DISPLAY true
-      #define DISPLAY OLED
+      #define DISPLAY MONO_OLED
       #define HAS_CONSOLE true
       #define HAS_BLUETOOTH false
       #define HAS_BLE true
