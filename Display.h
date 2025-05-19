@@ -119,7 +119,7 @@ void busyCallback(const void* p) { display_callback(); }
   #define DISP_W 128
   #define DISP_H 64
   #define DISP_ADDR -1
-#elif BOARD_MODEL == BOARD_TBEAM_S_V1
+#elif BOARD_MODEL == BOARD_TBEAM_S_V1 || BOARD_STATION_G2
   #define DISP_RST -1
   #define DISP_ADDR 0x3C
   #define SCL_OLED 18
@@ -164,7 +164,7 @@ uint32_t last_epd_full_refresh = 0;
     Adafruit_SSD1306 display(DISP_W, DISP_H, &Wire, DISP_RST);
   #elif BOARD_MODEL == BOARD_TDECK
     Adafruit_ST7789 display = Adafruit_ST7789(DISPLAY_CS, DISPLAY_DC, -1);
-  #elif BOARD_MODEL == BOARD_TBEAM_S_V1
+  #elif BOARD_MODEL == BOARD_TBEAM_S_V1 || BOARD_STATION_G2
     Adafruit_SH1106G display = Adafruit_SH1106G(DISP_W, DISP_H, &Wire, -1);
   #elif BOARD_MODEL == BOARD_HELTEC_T114
     ST7789Spi display(&SPI1, DISPLAY_RST, DISPLAY_DC, DISPLAY_CS);
@@ -267,7 +267,10 @@ void update_area_positions() {
 }
 
 uint8_t display_contrast = 0x00;
-#if BOARD_MODEL == BOARD_TBEAM_S_V1
+#if BOARD_MODEL == BOARD_TBEAM_S_V1 
+  void set_contrast(Adafruit_SH1106G *display, uint8_t value) {
+  }
+#elif BOARD_MODEL == BOARD_STATION_G2
   void set_contrast(Adafruit_SH1106G *display, uint8_t value) {
   }
 #elif BOARD_MODEL == BOARD_HELTEC_T114
@@ -369,7 +372,7 @@ bool display_init() {
         pinMode(pin_backlight, OUTPUT);
         analogWrite(pin_backlight, 0);
       #endif
-    #elif BOARD_MODEL == BOARD_TBEAM_S_V1
+    #elif BOARD_MODEL == BOARD_TBEAM_S_V1 || BOARD_STATION_G2
       Wire.begin(SDA_OLED, SCL_OLED);
     #endif
 
@@ -423,7 +426,7 @@ bool display_init() {
     // set white as default pixel colour for Heltec T114
     display.setRGB(COLOR565(0xFF, 0xFF, 0xFF));
     if (false) {
-    #elif BOARD_MODEL == BOARD_TBEAM_S_V1
+    #elif BOARD_MODEL == BOARD_TBEAM_S_V1 || BOARD_STATION_G2
     if (!display.begin(display_address, true)) {
     #else
     if (!display.begin(SSD1306_SWITCHCAPVCC, display_address)) {
@@ -459,7 +462,7 @@ bool display_init() {
           #elif BOARD_MODEL == BOARD_TBEAM
             disp_mode = DISP_MODE_LANDSCAPE;
             display.setRotation(0);
-          #elif BOARD_MODEL == BOARD_TBEAM_S_V1
+          #elif BOARD_MODEL == BOARD_TBEAM_S_V1 || Station_G2
             disp_mode = DISP_MODE_PORTRAIT;
             display.setRotation(1);
           #elif BOARD_MODEL == BOARD_HELTEC32_V2
