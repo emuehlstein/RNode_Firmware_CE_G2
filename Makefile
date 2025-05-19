@@ -286,14 +286,14 @@ upload-station_g2:
 	@echo
 	@echo Put board into flashing mode by holding BOOT button while momentarily pressing the RESET button. Hit enter when done.
 	@read _
-	arduino-cli upload -p $(or $(port), /dev/ttyACM0) --fqbn esp32:esp32:esp32s3
+	arduino-cli upload -p $(or $(port), /dev/cu.usbmodem1101) --fqbn esp32:esp32:esp32s3
 	@sleep 3
-	python3 ./Release/esptool/esptool.py --chip esp32-s3 --port $(or $(port), /dev/ttyACM0) --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode qio --flash_freq 80m --flash_size 4MB 0x210000 ./Release/console_image.bin
+	python3 ./Release/esptool/esptool.py --chip esp32-s3 --port $(or $(port), /dev/cu.usbmodem1101) --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode qio --flash_freq 80m --flash_size 4MB 0x210000 ./Release/console_image.bin
 	@sleep 3
 	@echo Press the RESET button on the board now, and hit enter
 	@read _
 	@sleep 1
-	rnodeconf $(or $(port), /dev/ttyACM0) --firmware-hash $$(./partition_hashes ./build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin)
+	rnodeconf $(or $(port), /dev/cu.usbmodem1101) --firmware-hash $$(./partition_hashes ./build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin)
 
 release:  console-site spiffs-image $(shell grep ^release- Makefile | cut -d: -f1)
 

@@ -125,7 +125,6 @@
   #define PRODUCT_STATION_G2 0x60 // Station G2
   #define BOARD_STATION_G2   0x61 // Station G2
 
-
   #define PRODUCT_HMBRW       0xF0
   #define BOARD_HMBRW         0x32
   #define BOARD_HUZZAH32      0x34
@@ -1116,6 +1115,7 @@
       #define OCP_TUNED 0x38
 
       #define HAS_DISPLAY true
+      #define DISPLAY OLED
       #define HAS_CONSOLE true
       #define HAS_BLUETOOTH false
       #define HAS_BLE true
@@ -1123,6 +1123,7 @@
       #define HAS_NP false
       #define HAS_SD false
       #define HAS_EEPROM true
+       #define INTERFACE_COUNT 1
 
       #define HAS_INPUT true
       #define HAS_SLEEP false
@@ -1131,16 +1132,41 @@
       #define I2C_SCL 6
       #define I2C_SDA 5
 
+      const uint8_t interfaces[INTERFACE_COUNT] = {SX1262};
+      const bool interface_cfg[INTERFACE_COUNT][3] = { 
+                    // SX1262
+          {
+              false, // DEFAULT_SPI
+              true, // HAS_TCXO
+              true  // DIO2_AS_RF_SWITCH
+          }, 
+      };
+      const uint8_t interface_pins[INTERFACE_COUNT][10] = { 
+                  // SX1262
+          {
+              11, // pin_ss
+              12, // pin_sclk
+              13, // pin_mosi
+              14, // pin_miso
+              47, // pin_busy
+              48, // pin_dio
+              21, // pin_reset
+              -1, // pin_txen
+              -1, // pin_rxen
+              -1  // pin_tcxo_enable
+          }
+      };
       const int pin_btn_usr1 = 38;
 
-      const int pin_cs = 11;
-      const int pin_reset = 21;
-      const int pin_sclk = 12;
-      const int pin_mosi = 13;
-      const int pin_miso = 14;
-      const int pin_tcxo_enable = -1;
-      const int pin_dio = 48;
-      const int pin_busy = 47;
+      // OLD definitions - to delete
+      //const int pin_cs = 11;
+      //const int pin_reset = 21;
+      //const int pin_sclk = 12;
+      //const int pin_mosi = 13;
+      //const int pin_miso = 14;
+      //const int pin_tcxo_enable = -1;
+      //const int pin_dio = 48;
+      //const int pin_busy = 47;
       
       const int SD_MISO = 37;
       const int SD_MOSI = 35;
