@@ -119,11 +119,17 @@ void busyCallback(const void* p) { display_callback(); }
   #define DISP_W 128
   #define DISP_H 64
   #define DISP_ADDR -1
-#elif BOARD_MODEL == BOARD_TBEAM_S_V1 || BOARD_STATION_G2
+#elif BOARD_MODEL == BOARD_TBEAM_S_V1
   #define DISP_RST -1
   #define DISP_ADDR 0x3C
   #define SCL_OLED 18
   #define SDA_OLED 17
+  #define DISP_CUSTOM_ADDR false
+#elif BOARD_MODEL == BOARD_STATION_G2
+  #define DISP_RST -1
+  #define DISP_ADDR 0x3C
+  #define SCL_OLED 6
+  #define SDA_OLED 5
   #define DISP_CUSTOM_ADDR false
 #elif BOARD_MODEL == BOARD_H_W_PAPER
   #define DISP_W 250
