@@ -1,3 +1,21 @@
+# G2 Updates 2025.05.20
+I've updated the board, display, and makefile with information found in other projects.  I'm struggling with the EEPROM load at this point.  It's possible to load the firmware on the G2, and connect to it with rnodeconf or the rnode web flasher, however, it does not appear to be "provisioned" correctly.  It's possible to provision it as a Tbeam Supreme (using the web flasher) at which point rnodeconf is able to read the EEPROM and returns bad info about the device.
+
+## Brief build instructions:
+esptool.py erase_flash
+make spiffs
+make firmware-station_g2 && make upload-station_g2
+
+Result:
+rnodeconf /dev/cu.usbmodem101 --firmware-hash $(./partition_hashes ./build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin)
+[09:00:35 Opening serial port /dev/cu.usbmodem101...
+[09:00:39 Device connected
+[09:00:39 Current firmware version: 1.74
+[09:00:39 Reading EEPROM...
+[09:00:39 This device has not been provisioned yet, cannot set firmware hash
+make: *** [upload-station_g2] Error 77
+
+
 # RNode Firmware - Community Edition
 
 This is the community maintained fork of the open firmware which powers RNode devices. It has been created to continue to expand development and support for more hardware devices, as the upstream repository is no longer accepting PRs for new hardware support. The original repository by Mark Qvist can be found [here](https://github.com/markqvist/RNode_Firmware).
