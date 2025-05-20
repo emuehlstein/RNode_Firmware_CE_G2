@@ -4,19 +4,62 @@ I've updated the board, display, and makefile with information found in other pr
 ## Brief build instructions:
 ```
 esptool.py erase_flash
-make spiffs
 make firmware-station_g2 && make upload-station_g2
 ```
 
-## Result:
+## Result
+
+### Running make firmware & make upload
 ```
-rnodeconf /dev/cu.usbmodem101 --firmware-hash $(./partition_hashes ./build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin)
-[09:00:35 Opening serial port /dev/cu.usbmodem101...
-[09:00:39 Device connected
-[09:00:39 Current firmware version: 1.74
-[09:00:39 Reading EEPROM...
-[09:00:39 This device has not been provisioned yet, cannot set firmware hash
-make: *** [upload-station_g2] Error 77
+rnodeconf /dev/cu.usbmodem101 --firmware-hash $(./partition_hashes ./build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin) --product 60 --model 61 --rom --hwrev 1
+[10:52:21 Opening serial port /dev/cu.usbmodem101...
+[10:52:24 Device connected
+[10:52:24 Current firmware version: 1.74
+[10:52:24 Reading EEPROM...
+[10:52:24 Waiting for ESP32 reset...
+[10:52:30 Loading signing key...
+[10:52:30 Bootstrapping device EEPROM...
+[10:52:32 EEPROM written! Validating...
+[10:52:34 Waiting for ESP32 reset...
+[10:52:41 EEPROM checksum correct
+[10:52:41 Device signature validated
+[10:52:41 EEPROM Bootstrapping successful!
+```
+
+### Running `rnsdconf -i /dev/cu.usbmodem101`
+```
+[10:54:33 Opening serial port /dev/cu.usbmodem101...
+[10:54:37 Device connected
+[10:54:37 Current firmware version: 1.74
+[10:54:37 Reading EEPROM...
+[10:54:37 EEPROM checksum correct
+[10:54:37 Device signature validated
+[10:54:37 
+[10:54:37 Device info:
+[10:54:37       Product            : Station G2 815 - 940 Mhz (60:61:61)
+[10:54:37       Device signature   : Validated - Local signature
+[10:54:37       Firmware version   : 1.74
+[10:54:37       Hardware revision  : 1
+[10:54:37       Serial number      : 00:00:00:05
+[10:54:37       Modem chip         : SX1262
+[10:54:37       Frequency range    : 815.0 MHz - 940.0 MHz
+[10:54:37       Max TX power       : 22 dBm
+[10:54:37       Manufactured       : 2025-05-20 10:52:30
+[10:54:37       Device mode        : Normal (host-controlled)
+```
+
+### Running `rnsd`
+```
+2025-05-20 10:55:42] [Notice]   Opening serial port /dev/cu.usbmodem101...
+[2025-05-20 10:55:44] [Notice]   Serial port /dev/cu.usbmodem101 is now open
+[2025-05-20 10:55:44] [Error]    TX power mismatch
+[2025-05-20 10:55:44] [Error]    Radio state mismatch
+[2025-05-20 10:55:44] [Error]    After configuring RNodeInterface[Tube Node], the reported radio parameters did not match your configuration.
+[2025-05-20 10:55:44] [Error]    Make sure that your hardware actually supports the parameters specified in the configuration
+[2025-05-20 10:55:44] [Error]    Aborting RNode startup
+[2025-05-20 10:55:45] [Notice]   Started rnsd version 0.9.3
+[2025-05-20 10:55:50] [Notice]   Opening serial port /dev/cu.usbmodem10...
+...
 ```
 
 ## Reference
