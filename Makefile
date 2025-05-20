@@ -547,7 +547,7 @@ release-heltec_t114:
 	rm -r build
 
 release-station_g2:
-	arduino-cli compile --fqbn esp32:esp32:esp32s3:CDCOnBoot=cdc -e --build-property "build.partitions=no_ota" --build-property "upload.maximum_size=16777216" --build-property "compiler.cpp.extra_flags=\"-DBOARD_MODEL=0x3B\""
+	arduino-cli compile --fqbn esp32:esp32:esp32s3:CDCOnBoot=cdc -e --build-property "build.partitions=no_ota" --build-property "upload.maximum_size=16777216" --build-property "compiler.cpp.extra_flags=\"-DBOARD_MODEL=0x61\""
 	cp ~/.arduino15/packages/esp32/hardware/esp32/$(ESP_IDF_VER)/tools/partitions/boot_app0.bin build/rnode_firmware_station_g2.boot_app0
 	cp build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin build/rnode_firmware_station_g2.bin
 	cp build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bootloader.bin build/rnode_firmware_station_g2.bootloader
