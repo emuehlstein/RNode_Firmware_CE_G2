@@ -293,9 +293,12 @@ upload-station_g2:
 	@echo Press the RESET button on the board now, and hit enter
 	@read _
 	@sleep 1
-	rnodeconf $(or $(port), /dev/cu.usbmodem101) --firmware-hash $$(./partition_hashes ./build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin)
+	rnodeconf $(or $(port), /dev/cu.usbmodem101) --firmware-hash $$(./partition_hashes ./build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin) --product 60 --model 61 --rom --hwrev 1
 
 release:  console-site spiffs-image $(shell grep ^release- Makefile | cut -d: -f1)
+
+
+
 
 release-hashes:
 	python3 ./release_hashes.py > ./Release/release.json
