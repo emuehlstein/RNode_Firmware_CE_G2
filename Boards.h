@@ -1123,7 +1123,7 @@
       #define HAS_NP false
       #define HAS_SD false
       #define HAS_EEPROM true
-       #define INTERFACE_COUNT 1
+      #define INTERFACE_COUNT 1
 
       #define HAS_INPUT true
       #define HAS_SLEEP false
@@ -1136,7 +1136,7 @@
       const bool interface_cfg[INTERFACE_COUNT][3] = { 
                     // SX1262
           {
-              false, // DEFAULT_SPI
+              true, // DEFAULT_SPI
               true, // HAS_TCXO
               true  // DIO2_AS_RF_SWITCH
           }, 
