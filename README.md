@@ -8,7 +8,7 @@ make spiffs
 make firmware-station_g2 && make upload-station_g2
 ```
 
-Result:
+## Result:
 ```
 rnodeconf /dev/cu.usbmodem101 --firmware-hash $(./partition_hashes ./build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin)
 [09:00:35 Opening serial port /dev/cu.usbmodem101...
@@ -19,6 +19,8 @@ rnodeconf /dev/cu.usbmodem101 --firmware-hash $(./partition_hashes ./build/esp32
 make: *** [upload-station_g2] Error 77
 ```
 
+## Reference
+[Markqvist Discussion](https://github.com/markqvist/Reticulum/discussions/558)
 # RNode Firmware - Community Edition
 
 This is the community maintained fork of the open firmware which powers RNode devices. It has been created to continue to expand development and support for more hardware devices, as the upstream repository is no longer accepting PRs for new hardware support. The original repository by Mark Qvist can be found [here](https://github.com/markqvist/RNode_Firmware).
