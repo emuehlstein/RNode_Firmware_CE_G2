@@ -159,7 +159,7 @@ firmware-heltec_t114_gps:
 	arduino-cli compile --log --fqbn Heltec_nRF52:Heltec_nRF52:HT-n5262 -e --build-property "build.partitions=no_ota" --build-property "upload.maximum_size=2097152" --build-property "compiler.cpp.extra_flags=\"-DBOARD_MODEL=0x3C\" \"-DBOARD_VARIANT=0xCB\""
 
 firmware-station_g2:
-	arduino-cli compile --fqbn "esp32:esp32:esp32s3:CDCOnBoot=cdc" -e --build-property "build.partitions=no_ota" --build-property "upload.maximum_size=16777216" --build-property "compiler.cpp.extra_flags=\"-DBOARD_MODEL=0x61\""
+	arduino-cli compile --fqbn "esp32:esp32:esp32s3:CDCOnBoot=cdc" -e --build-property "build.partitions=no_ota" --build-property "upload.maximum_size=16777216" --build-property "compiler.cpp.extra_flags=\"-DBOARD_MODEL=0x61\" \"-DBOARD_VARIANT=0x62\""
 
 upload-tbeam:
 	arduino-cli upload -p $(or $(port), /dev/ttyACM0) --fqbn esp32:esp32:t-beam
@@ -288,7 +288,7 @@ upload-station_g2:
 	python3 ./Release/esptool/esptool.py --chip esp32-s3 --port $(or $(port), /dev/cu.usbmodem101) --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode qio --flash_freq 80m --flash_size 4MB 0x210000 ./Release/console_image.bin
 	@sleep 3
 	@sleep 1
-	rnodeconf $(or $(port), /dev/cu.usbmodem101) --firmware-hash $$(./partition_hashes ./build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin) --product 60 --model 61 --rom --hwrev 1
+	rnodeconf $(or $(port), /dev/cu.usbmodem101) --firmware-hash $$(./partition_hashes ./build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin) --product 60 --model 62 --rom --hwrev 1
 
 release:  console-site spiffs-image $(shell grep ^release- Makefile | cut -d: -f1)
 
@@ -305,7 +305,7 @@ release-tbeam: check_bt_buffers
 	cp build/esp32.esp32.t-beam/RNode_Firmware_CE.ino.bootloader.bin build/rnode_firmware_tbeam.bootloader
 	cp build/esp32.esp32.t-beam/RNode_Firmware_CE.ino.partitions.bin build/rnode_firmware_tbeam.partitions
 	zip --junk-paths ./Release/rnode_firmware_tbeam.zip ./Release/esptool/esptool.py ./Release/console_image.bin build/rnode_firmware_tbeam.boot_app0 build/rnode_firmware_tbeam.bin build/rnode_firmware_tbeam.bootloader build/rnode_firmware_tbeam.partitions
-	rm -r build
+	rm -r buildc
 
 release-tbeam_sx1262: check_bt_buffers
 	arduino-cli compile --fqbn esp32:esp32:t-beam $(COMMON_BUILD_FLAGS) --build-property "compiler.cpp.extra_flags=\"-DBOARD_MODEL=0x33\" \"-DBOARD_VARIANT=0xE8\""
@@ -545,7 +545,7 @@ release-heltec_t114:
 	rm -r build
 
 release-station_g2:
-	arduino-cli compile --fqbn esp32:esp32:esp32s3:CDCOnBoot=cdc -e --build-property "build.partitions=no_ota" --build-property "upload.maximum_size=16777216" --build-property "compiler.cpp.extra_flags=\"-DBOARD_MODEL=0x61\""
+	arduino-cli compile --fqbn esp32:esp32:esp32s3:CDCOnBoot=cdc -e --build-property "build.partitions=no_ota" --build-property "upload.maximum_size=16777216" --build-property "compiler.cpp.extra_flags=\"-DBOARD_MODEL=0x61\" \"-DBOARD_VARIANT=0x62\"""
 	cp ~/.arduino15/packages/esp32/hardware/esp32/$(ESP_IDF_VER)/tools/partitions/boot_app0.bin build/rnode_firmware_station_g2.boot_app0
 	cp build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin build/rnode_firmware_station_g2.bin
 	cp build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bootloader.bin build/rnode_firmware_station_g2.bootloader

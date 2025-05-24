@@ -1264,6 +1264,8 @@ void setTXPower(RadioInterface* radio, int txp) {
     if (model == MODEL_E3) radio->setTxPower(txp, PA_OUTPUT_PA_BOOST_PIN);
     if (model == MODEL_E8) radio->setTxPower(txp, PA_OUTPUT_PA_BOOST_PIN);
 
+	if (model == MODEL_62) radio->setTxPower(txp, PA_OUTPUT_PA_BOOST_PIN);
+
     if (model == MODEL_FE) radio->setTxPower(txp, PA_OUTPUT_PA_BOOST_PIN);
     if (model == MODEL_FF) radio->setTxPower(txp, PA_OUTPUT_RFO_PIN);
 }
@@ -1548,6 +1550,8 @@ bool eeprom_model_valid() {
 	if (model == MODEL_FF) {
 	#elif BOARD_MODEL == BOARD_E22_ESP32
 	if (model == MODEL_FF || model == MODEL_FE) {
+	#elif BOARD_MODEL == BOARD_STATION_G2
+	if (model == MODEL_62 || model == MODEL_62) {
 	#elif BOARD_MODEL == BOARD_HMBRW
 	if (model == MODEL_FF || model == MODEL_FE) {
 	#elif BOARD_MODEL == BOARD_GENERIC_ESP32

@@ -124,6 +124,7 @@
 
   #define PRODUCT_STATION_G2 0x60 // Station G2
   #define BOARD_STATION_G2   0x61 // Station G2
+  #define MODEL_62           0x62 // Station G2, 915 MHz
 
   #define PRODUCT_HMBRW       0xF0
   #define BOARD_HMBRW         0x32
@@ -1110,6 +1111,7 @@
       #define IS_ESP32S3 true
       #define MODEM SX1262
       #define DIO2_AS_RF_SWITCH true
+      #define SX126X_DIO3_TCXO_VOLTAGE 1.8 // borrowed from Meshstastic to see if it has any effect
       #define HAS_BUSY true
       #define HAS_TCXO true
       #define OCP_TUNED 0x38
@@ -1131,6 +1133,8 @@
       #define PMU_IRQ 40
       #define I2C_SCL 6
       #define I2C_SDA 5
+
+      #if BOARD_VARIANT == MODEL_62
 
       const uint8_t interfaces[INTERFACE_COUNT] = {SX1262};
       const bool interface_cfg[INTERFACE_COUNT][3] = { 
@@ -1156,24 +1160,17 @@
               -1  // pin_tcxo_enable
           }
       };
-      const int pin_btn_usr1 = 38;
 
-      // OLD definitions - to delete
-      //const int pin_cs = 11;
-      //const int pin_reset = 21;
-      //const int pin_sclk = 12;
-      //const int pin_mosi = 13;
-      //const int pin_miso = 14;
-      //const int pin_tcxo_enable = -1;
-      //const int pin_dio = 48;
-      //const int pin_busy = 47;
       
+      const int pin_btn_usr1 = 38;
       const int SD_MISO = 37;
       const int SD_MOSI = 35;
       const int SD_CLK = 36;
       const int SD_CS = 47;
 
       const int IMU_CS = 34;
+
+      #endif
 
       #if HAS_NP == false
         #if defined(EXTERNAL_LEDS)
