@@ -285,7 +285,7 @@ upload-techo:
 upload-station_g2:
 	arduino-cli upload -p $(or $(port), /dev/cu.usbmodem101) --fqbn esp32:esp32:esp32s3
 	@sleep 3
-	python3 ./Release/esptool/esptool.py --chip esp32-s3 --port $(or $(port), /dev/cu.usbmodem101) --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode qio --flash_freq 80m --flash_size 4MB 0x210000 ./Release/console_image.bin
+	python3 ./Release/esptool/esptool.py --chip esp32-s3 --port $(or $(port), /dev/cu.usbmodem101) --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode qio --flash_freq 80m --flash_size 16MB 0x210000 ./Release/console_image.bin
 	@sleep 3
 	@sleep 1
 	rnodeconf $(or $(port), /dev/cu.usbmodem101) --firmware-hash $$(./partition_hashes ./build/esp32.esp32.esp32s3/RNode_Firmware_CE.ino.bin) --product 60 --model 62 --rom --hwrev 1
