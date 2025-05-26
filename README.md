@@ -3,6 +3,7 @@ I've updated the board, display, and makefile with information found in other pr
 
 ## Brief build instructions:
 ```
+rnodeconf /dev/cu.usbmodem101 --eeprom-wipe
 esptool.py erase_flash
 make firmware-station_g2 && make upload-station_g2
 ```
