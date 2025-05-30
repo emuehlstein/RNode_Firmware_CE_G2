@@ -1,3 +1,8 @@
+# G2 Updates 2025.05.30
+The G2 firmware builds and uploads cleanly.  When running, it can be detected as an rnode with rnodeconf or the liamcottle web flasher.
+
+When starting rnsd, the TX Power is always reported as 0 and the radio state "offline".  These mismatches in expected vs actual configuration cause rnsd to abort & restart.
+
 # G2 Updates 2025.05.20
 I've updated the board, display, and makefile with information found in other projects.  I'm struggling with the EEPROM load at this point.  It's possible to load the firmware on the G2, and connect to it with rnodeconf or the rnode web flasher, however, it does not appear to be "provisioned" correctly.  It's possible to provision it as a Tbeam Supreme (using the web flasher) at which point rnodeconf is able to read the EEPROM and returns bad info about the device.
 
@@ -5,7 +10,7 @@ I've updated the board, display, and makefile with information found in other pr
 ```
 rnodeconf /dev/cu.usbmodem101 --eeprom-wipe
 esptool.py erase_flash
-make firmware-station_g2 && make upload-station_g2
+make firmware-station_g2 && make spiffs && make upload-station_g2
 ```
 
 ## Result
