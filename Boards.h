@@ -1111,7 +1111,6 @@
       #if BOARD_VARIANT == MODEL_62
       #define IS_ESP32S3 true
       #define MODEM SX1262
-      #define DIO2_AS_RF_SWITCH true
       #define HAS_BUSY true
       #define HAS_TCXO true
       #define OCP_TUNED 0x38
@@ -1126,7 +1125,6 @@
       #define HAS_SD false
       #define HAS_EEPROM true
 
-      
       #define INTERFACE_COUNT 1
 
       #define HAS_INPUT true

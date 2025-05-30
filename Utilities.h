@@ -1551,7 +1551,7 @@ bool eeprom_model_valid() {
 	#elif BOARD_MODEL == BOARD_E22_ESP32
 	if (model == MODEL_FF || model == MODEL_FE) {
 	#elif BOARD_MODEL == BOARD_STATION_G2
-	if (model == MODEL_62 || model == MODEL_62) {
+	if (model == MODEL_62) {
 	#elif BOARD_MODEL == BOARD_HMBRW
 	if (model == MODEL_FF || model == MODEL_FE) {
 	#elif BOARD_MODEL == BOARD_GENERIC_ESP32
