@@ -738,9 +738,15 @@ void sx126x::setTxPower(int level, int outputPin) {
     pa_buf[3] = 0x01; // PALut always 0x01 (reserved according to datasheet)
 
     executeOpcode(OP_PA_CONFIG_6X, pa_buf, 4); // set pa_config for high power
+    
+    #if BOARD_MODEL == BOARD_STATION_G2
+        // set max level to 19
+        if (level > 19) { level = 19; }
+    #else 
+        if (level > 22) { level = 22; }
+    #endif
 
-    if (level > 22) { level = 22; }
-    else if (level < -9) { level = -9; }
+    if (level < -9) { level = -9; }
 
     _txp = level;
 
