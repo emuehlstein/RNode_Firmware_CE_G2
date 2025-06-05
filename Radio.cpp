@@ -729,23 +729,37 @@ void sx126x::setTxPower(int level, int outputPin) {
     // WORKAROUND - Better Resistance of the SX1262 Tx to Antenna Mismatch, see DS_SX1261-2_V1.2 datasheet chapter 15.2
     // RegTxClampConfig = @address 0x08D8
     writeRegister(0x08D8, readRegister(0x08D8) | (0x0F << 1));
+     
+    
+    # if BOARD_MODEL == BOARD_STATION_G2
+        uint8_t pa_buf[4];
 
-    uint8_t pa_buf[4];
+        if (level > 19) { level = 19; } // max level for G2 is 19dBm
 
-    pa_buf[0] = 0x04; // PADutyCycle needs to be 0x04 to achieve 22dBm output, but can be lowered for better efficiency at lower outputs
-    pa_buf[1] = 0x07; // HPMax at 0x07 is maximum supported for SX1262
-    pa_buf[2] = 0x00; // DeviceSel 0x00 for SX1262 (0x01 for SX1261)
-    pa_buf[3] = 0x01; // PALut always 0x01 (reserved according to datasheet)
+        if (level >= 17) {
+          pa_buf[0] = 0x03; // Optimal PADutyCycle for 17dBm
+          pa_buf[1] = 0x02; // Optimal HPMax for 17dBm
+          pa_buf[2] = 0x00; // DeviceSel 0x00 for SX1262 (0x01 for SX1261)
+          pa_buf[3] = 0x01; // PALut always 0x01 (reserved according to datasheet)
+          }  else {
+          pa_buf[0] = 0x02; // Optimal PADutyCycle for 14dBm
+          pa_buf[1] = 0x02; // Optimal HPMax for 14dBm
+          pa_buf[2] = 0x00; // DeviceSel 0x00 for SX1262 (0x01 for SX1261)
+          pa_buf[3] = 0x01; // PALut always 0x01 (reserved according to datasheet)
+          }
+    #else
+      uint8_t pa_buf[4];
+
+      pa_buf[0] = 0x04; // PADutyCycle needs to be 0x04 to achieve 22dBm output, but can be lowered for better efficiency at lower outputs
+      pa_buf[1] = 0x07; // HPMax at 0x07 is maximum supported for SX1262
+      pa_buf[2] = 0x00; // DeviceSel 0x00 for SX1262 (0x01 for SX1261)
+      pa_buf[3] = 0x01; // PALut always 0x01 (reserved according to datasheet)
+    #endif
 
     executeOpcode(OP_PA_CONFIG_6X, pa_buf, 4); // set pa_config for high power
     
-    #if BOARD_MODEL == BOARD_STATION_G2
-        // set max level to 19
-        if (level > 19) { level = 19; }
-    #else 
-        if (level > 22) { level = 22; }
-    #endif
-
+    
+    if (level > 22) { level = 22; }
     if (level < -9) { level = -9; }
 
     _txp = level;
