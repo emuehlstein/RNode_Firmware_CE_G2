@@ -179,7 +179,7 @@ void setup() {
     boot_seq();
   #endif
 
-  #if BOARD_MODEL != BOARD_RAK4631 && BOARD_MODEL != BOARD_HELTEC_T114 && BOARD_MODEL != BOARD_TECHO && BOARD_MODEL != BOARD_T3S3 && BOARD_MODEL != BOARD_TBEAM_S_V1 && BOARD_MODEL != BOARD_OPENCOM_XL
+  #if BOARD_MODEL != BOARD_RAK4631 && BOARD_MODEL != BOARD_HELTEC_T114 && BOARD_MODEL != BOARD_TECHO && BOARD_MODEL != BOARD_T3S3 && BOARD_MODEL != BOARD_TBEAM_S_V1 && BOARD_MODEL != BOARD_OPENCOM_XL && BOARD_MODEL != BOARD_STATION_G2
   // Some boards need to wait until the hardware UART is set up before booting
   // the full firmware. In the case of the RAK4631/TECHO, the line below will wait
   // until a serial connection is actually established with a master. Thus, it
@@ -1409,11 +1409,36 @@ void validate_status() {
 
   if (boot_vector == START_FROM_BOOTLOADER || boot_vector == START_FROM_POWERON) {
     if (eeprom_lock_set()) {
+      Serial.write("EEPROM lock set\r\n");
+      if (eeprom_product_valid()) {
+        Serial.write("EEPROM product valid\r\n");
+      } else {
+        Serial.write("EEPROM product invalid\r\n");
+      }
+
+      if (eeprom_model_valid()) {
+        Serial.write("EEPROM model valid\r\n");
+      } else {
+        Serial.write("EEPROM model invalid\r\n");
+      }
+
+      if (eeprom_hwrev_valid()) {
+        Serial.write("EEPROM hardware revision valid\r\n");
+      } else {
+        Serial.write("EEPROM hardware revision invalid\r\n");
+      }
+
       if (eeprom_product_valid() && eeprom_model_valid() && eeprom_hwrev_valid()) {
+      
+      
+        Serial.write("EEPROM product, model and hardware revision valid\r\n");
         if (eeprom_checksum_valid()) {
+          Serial.write("EEPROM checksum valid\r\n");
           eeprom_ok = true;
           if (modems_installed) {
+            Serial.write("Modems installed\r\n");
             if (device_init()) {
+              Serial.write("Radios initialized\r\n");
               hw_ready = true;
             } else {
               hw_ready = false;
@@ -1580,7 +1605,7 @@ void loop() {
   process_serial();
 
   #if HAS_DISPLAY
-    #if DISPLAY == OLED || DISPLAY == TFT || DISPLAY == ADAFRUIT_TFT
+    #if DISPLAY == OLED || DISPLAY == TFT || DISPLAY == ADAFRUIT_TFT || DISPLAY == MONO_OLED
     if (disp_ready) update_display();
     #elif DISPLAY == EINK_BW || DISPLAY == EINK_3C
     // Display refreshes take so long on e-paper displays that they can disrupt
